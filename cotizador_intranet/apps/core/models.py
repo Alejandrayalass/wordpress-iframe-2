@@ -1,36 +1,18 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
-from django.utils.translation import gettext_lazy as _
 
-class Usuario(AbstractUser):
-    TIPO_USUARIO_CHOICES = [
-        ('ADMIN', 'Administrador'),
-        ('VENDEDOR', 'Vendedor'),
-        ('ALMACEN', 'Almacén'),
-    ]
-    
-    tipo_usuario = models.CharField(
-        max_length=10,
-        choices=TIPO_USUARIO_CHOICES,
-        default='VENDEDOR'
-    )
-    telefono = models.CharField(max_length=20, blank=True)
-    direccion = models.TextField(blank=True)
-    fecha_nacimiento = models.DateField(null=True, blank=True)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
-    
-    class Meta:
-        verbose_name = 'Usuario'
-        verbose_name_plural = 'Usuarios'
-    
+class ConfiguracionSistema(models.Model):
+    nombre = models.CharField(max_length=100, unique=True)
+    valor = models.CharField(max_length=255, blank=True, default='')
+    actualizado = models.DateTimeField(auto_now=True)
+
     def __str__(self):
-        return f"{self.get_full_name()} ({self.username})"
-    
-    @property
-    def es_administrador(self):
-        return self.tipo_usuario == 'ADMIN'
-    
-    @property
-    def es_vendedor(self):
-        return self.tipo_usuario == 'VENDEDOR'
+        return f"{self.nombre} = {self.valor}"
+
+class Auditoria(models.Model):
+    accion = models.CharField(max_length=100)
+    usuario = models.CharField(max_length=150, blank=True, default='')
+    detalle = models.TextField(blank=True, default='')
+    fecha = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.accion} @ {self.fecha:%Y-%m-%d %H:%M}"

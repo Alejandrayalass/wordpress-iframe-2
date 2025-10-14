@@ -1,9 +1,5 @@
 from django.apps import AppConfig
 
 class CoreConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'core'
-    verbose_name = 'Sistema Core'
-    
-    def ready(self):
-        import core.signals
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "apps.core"

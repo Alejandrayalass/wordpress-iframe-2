@@ -1,0 +1,2 @@
+crispy-bootstrap5==2025.6
+django-crispy-forms==2.4
