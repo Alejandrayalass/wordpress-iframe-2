@@ -1,16 +1,21 @@
-# Nombre de Tu Proyecto
+# WordPress Iframe Manager
 
-WORDPRESS-IFRAME-2
-Una breve descripción de tu proyecto increíble.
+Plugin para gestionar iframes de forma segura en WordPress.
 
-## 📖 Descripción
+## Características
+- Configuración desde el panel de administración
+- Shortcode para insertar iframes
+- Validación y sanitización de URLs
+- Atributos de seguridad para iframes
 
-Aquí explicas en detalle de qué trata tu proyecto, qué inspiración tienes, etc.
+## Instalación
+1. Subir la carpeta al directorio `/wp-content/plugins/`
+2. Activar el plugin en el panel de WordPress
+3. Ir a Ajustes > Iframe Manager para configurar
 
-## 🚀 Características
-
-- Característica 1
-- Característica 2
+## Uso
+`[iframe_seguro]` - Usa la configuración por defecto
+`[iframe_seguro url="https://ejemplo.com" ancho="800" alto="600"]` - Parámetros personalizados
 
 ## 📜 Licencia (¡IMPORTANTE!)
 

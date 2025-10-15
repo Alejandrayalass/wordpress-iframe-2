@@ -1,0 +1,5 @@
+/* ============================================================
+   PROYECTO: Intranet / Cotizador
+   DB: PostgreSQL 15+
+   OBJETIVO: Esquema completo con auth admin, catálogos y cotización
+   ============================================================ */
