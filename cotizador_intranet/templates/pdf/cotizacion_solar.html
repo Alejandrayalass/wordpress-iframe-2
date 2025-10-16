@@ -1,0 +1,202 @@
+<!-- templates/pdf/cotizacion_solar.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cotización {{ cotizacion.folio }}</title>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div>
+            {% if empresa.logo_path %}
+            <img src="file://{{ empresa.logo_path }}" class="logo" alt="Logo">
+            {% else %}
+            <h1 style="color: #ff6b00;">{{ empresa.nombre }}</h1>
+            {% endif %}
+        </div>
+        <div class="folio-box">
+            <h2>COTIZACIÓN</h2>
+            <p style="margin: 5px 0;">{{ cotizacion.folio }}</p>
+            <p style="font-size: 10pt; margin: 0;">{{ fecha_generacion|date:"d/m/Y" }}</p>
+        </div>
+    </div>
+
+    <!-- Información de la Empresa -->
+    <div class="info-section">
+        <h3><i class="fas fa-building"></i> Información de la Empresa</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">RUT:</div>
+                <div class="info-value">{{ empresa.rut }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Dirección:</div>
+                <div class="info-value">{{ empresa.direccion }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Teléfono:</div>
+                <div class="info-value">{{ empresa.telefono }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email:</div>
+                <div class="info-value">{{ empresa.email }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información del Cliente -->
+    <div class="info-section">
+        <h3><i class="fas fa-user"></i> Datos del Cliente</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Nombre:</div>
+                <div class="info-value">{{ cliente.nombre_completo }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">RUT:</div>
+                <div class="info-value">{{ cliente.rut }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Email:</div>
+                <div class="info-value">{{ cliente.email }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Teléfono:</div>
+                <div class="info-value">{{ cliente.telefono }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Región:</div>
+                <div class="info-value">{{ cliente.region }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Dirección:</div>
+                <div class="info-value">{{ cliente.direccion }}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Datos Técnicos -->
+    <div class="info-section">
+        <h3><i class="fas fa-cogs"></i> Información Técnica</h3>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Tipo de Techo:</div>
+                <div class="info-value">{{ datos_tecnicos.tipo_techo }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Orientación:</div>
+                <div class="info-value">{{ datos_tecnicos.orientacion }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Superficie Aprox.:</div>
+                <div class="info-value">{{ datos_tecnicos.superficie_aproximada }} m²</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Potencia Objetivo:</div>
+                <div class="info-value">{{ datos_tecnicos.potencia_objetivo|default:"-" }} kW</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Consumo Promedio:</div>
+                <div class="info-value">{{ datos_tecnicos.consumo_promedio|default:"-" }} kWh/mes</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Productos -->
+    <div class="info-section">
+        <h3><i class="fas fa-box"></i> Detalle de Productos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Imagen</th>
+                    <th style="width: 35%;">Producto</th>
+                    <th style="width: 15%;">Cantidad</th>
+                    <th style="width: 17.5%;">Precio Unit.</th>
+                    <th style="width: 17.5%;">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td style="text-align: center;">
+                        {% if item.producto.imagen %}
+                        <img src="file://{{ item.producto.imagen.path }}" class="producto-imagen" alt="{{ item.nombre_producto }}">
+                        {% else %}
+                        <i class="fas fa-image fa-3x" style="color: #ccc;"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <strong>{{ item.nombre_producto }}</strong><br>
+                        <small style="color: #666;">SKU: {{ item.sku_producto }}</small><br>
+                        <small style="color: #666;">{{ item.descripcion_producto|truncatewords:15 }}</small>
+                    </td>
+                    <td style="text-align: center;">{{ item.cantidad }}</td>
+                    <td style="text-align: right;">${{ item.precio_unitario|floatformat:0 }}</td>
+                    <td style="text-align: right;">${{ item.total_item|floatformat:0 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Totales -->
+    <div class="totales">
+        <table>
+            <tr>
+                <td style="text-align: right;"><strong>Subtotal:</strong></td>
+                <td style="text-align: right;">${{ cotizacion.subtotal|floatformat:0 }}</td>
+            </tr>
+            <tr>
+                <td style="text-align: right;"><strong>IVA (19%):</strong></td>
+                <td style="text-align: right;">${{ cotizacion.iva|floatformat:0 }}</td>
+            </tr>
+            {% if cotizacion.descuento > 0 %}
+            <tr>
+                <td style="text-align: right;"><strong>Descuento:</strong></td>
+                <td style="text-align: right; color: red;">-${{ cotizacion.descuento|floatformat:0 }}</td>
+            </tr>
+            {% endif %}
+            <tr class="total-final">
+                <td style="text-align: right;"><strong>TOTAL:</strong></td>
+                <td style="text-align: right;"><strong>${{ cotizacion.total|floatformat:0 }}</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Métodos de Pago -->
+    <div class="metodos-pago">
+        <h4><i class="fas fa-credit-card"></i> Métodos de Pago Disponibles</h4>
+        {% for metodo in metodos_pago %}
+        <div class="metodo-item">
+            <h5 style="margin: 0 0 10px 0; color: #ff6b00;">{{ metodo.nombre }}</h5>
+            <p style="margin: 0;">{{ metodo.descripcion }}</p>
+            {% if metodo.datos_transferencia %}
+            <div style="margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px;">
+                <strong>Datos para Transferencia:</strong><br>
+                Banco: {{ metodo.datos_transferencia.banco }}<br>
+                Titular: {{ metodo.datos_transferencia.titular }}<br>
+                RUT: {{ metodo.datos_transferencia.rut }}<br>
+                Cuenta: {{ metodo.datos_transferencia.cuenta }}
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Comentarios -->
+    {% if cotizacion.comentarios %}
+    <div class="comentarios">
+        <h4><i class="fas fa-comment"></i> Comentarios del Cliente</h4>
+        <p>{{ cotizacion.comentarios }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>Documento generado el {{ fecha_generacion|date:"d/m/Y H:i" }}</p>
+        <p>Esta cotización tiene una validez de 30 días desde la fecha de emisión.</p>
+        <p><strong>{{ empresa.nombre }}</strong> | {{ empresa.email }} | {{ empresa.telefono }}</p>
+    </div>
+</body>
+</html>
